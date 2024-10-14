@@ -1,9 +1,5 @@
 # Northcoders News API
 
-For instructions, please head over to [L2C NC News](https://l2c.northcoders.com/courses/be/nc-news).
-
-
-
---- 
-
-This portfolio project was created as part of a Digital Skills Bootcamp in Software Engineering provided by [Northcoders](https://northcoders.com/)
+In order to connect to databases it's necessary to create .env files.
+First .env.development with PGDATABASE=database_name in it 
+and also .env.test with PGDATABASE=database_name_test in it.
