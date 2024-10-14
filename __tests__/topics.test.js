@@ -21,4 +21,14 @@ describe('/api/topics', () => {
             expect(body.length).toBe(3);
         })
     })
+    it("GET 404 Endpoint does not exist", () => {
+        return request(app)
+        .get('/api/trees')
+        .expect(404)
+        .then((response) => {
+          expect(response.status).toBe(404)
+          expect(response.body.msg).toBe('URL Not Found');
+        })
+      })
+
 })
