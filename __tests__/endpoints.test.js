@@ -3,6 +3,7 @@ const request = require('supertest')
 const app = require('../app')
 const seed = require('../db/seeds/seed')
 const db = require('../db/connection')
+const endpoints = require('../endpoints.json')
 
 
 beforeEach(() => {
@@ -41,7 +42,19 @@ describe('Test Endpoints', () => {
             .then(({body}) => {
                 expect(body).toBeInstanceOf(Object);
                 expect(body['GET /api']).toHaveProperty('description');
+                expect(body).toEqual(endpoints)
             })
         });
+    });
+    describe('/api/articles/:article_id', () => {
+        test('200 - responds with a single article object when given a valid and present article id', () => {
+            return request(app)
+                .get('/api/articles/1')
+                .expect(200)
+                .then(({ body }) => {
+                    expect(body.article_id).toBe(1);
+                    expect(typeof body.title).toBe('string');
+                })
+        })        
     });
 });
