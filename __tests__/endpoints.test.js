@@ -55,6 +55,22 @@ describe('Test Endpoints', () => {
                     expect(body.article_id).toBe(1);
                     expect(typeof body.title).toBe('string');
                 })
-        })        
+        });
+        test('400 - responds with an error message when given invalid article_id', () => {
+            return request(app)
+            .get("/api/articles/smth_not_valid")
+            .expect(400)
+            .then(({ body }) => {
+                expect(body.message).toBe('Invalid id type');
+            })
+        })   
+        test('404 - responds with an error message when given article_id that does not exist', () => {
+            return request(app)
+            .get("/api/articles/888")
+            .expect(404)
+            .then(({ body }) => {
+                expect(body.message).toBe('Not Found');
+            })
+        })       
     });
 });
