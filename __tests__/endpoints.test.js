@@ -103,4 +103,37 @@ describe('Test Endpoints', () => {
               });
         });
     });
+    describe('/api/articles/:article_id/comments', () => {
+        test('200 - responds with comments array related to the particular article', () => {
+            return request(app)
+            .get("/api/articles/3/comments")
+            .expect(200)
+            .then(({ body }) => {
+                expect(body).toBeInstanceOf(Array);
+
+                body.forEach((comment) => {
+                    expect(typeof comment.article_id).toBe('number');
+                    expect(typeof comment.votes).toBe('number');
+                    expect(typeof comment.created_at).toBe('string');
+                    expect(typeof comment.author).toBe('string');
+                });
+            });
+        });
+        test('400 - responds with an error message when given invalid article_id', () => {
+            return request(app)
+            .get("/api/articles/smth_not_valid/comments")
+            .expect(400)
+            .then(({ body }) => {
+                expect(body.message).toBe('Invalid id type');
+            });
+        }); 
+        test('404 - responds with an error message when given article_id that does not exist', () => {
+            return request(app)
+            .get("/api/articles/888/comments")
+            .expect(404)
+            .then(({ body }) => {
+                expect(body.message).toBe('Not Found');
+            });
+        }); 
+    });
 });
