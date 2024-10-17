@@ -4,6 +4,7 @@ const app = require('../app')
 const seed = require('../db/seeds/seed')
 const db = require('../db/connection')
 const endpoints = require('../endpoints.json')
+require('jest-sorted')
 
 
 beforeEach(() => {
@@ -72,5 +73,34 @@ describe('Test Endpoints', () => {
                 expect(body.message).toBe('Not Found');
             })
         })       
+    });
+    describe('/api/articles', () => {
+        test('200 - responds with articles array', () => {
+            return request(app)
+            .get("/api/articles")
+            .expect(200)
+            .then(({ body }) => {
+                body.forEach((article) => {
+                    expect(typeof article.article_id).toBe('number');
+                    expect(typeof article.title).toBe('string');
+                    expect(typeof article.topic).toBe('string');
+                    expect(typeof article.created_at).toBe('string');
+                    expect(typeof article.author).toBe('string');
+                    expect(typeof article.votes).toBe('number');
+                    expect(typeof article.article_img_url).toBe('string');
+                    expect(typeof article.comment_count).toBe('number');
+
+                    expect(article).not.toHaveProperty("body");
+                })
+            })
+        });
+        test('200 - responds with articles array sorted by date', () => {
+            return request(app)
+            .get("/api/articles")
+            .expect(200)
+            .then(({ body }) => {
+                expect(body).toBeSortedBy("created_at", {descending: true});
+              });
+        });
     });
 });
