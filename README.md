@@ -1,4 +1,4 @@
-# Northcoders News API
+# News API
 
 In order to connect to databases it's necessary to create .env files.
 First .env.development with PGDATABASE=database_name in it 
