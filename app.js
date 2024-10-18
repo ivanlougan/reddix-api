@@ -9,6 +9,7 @@ const { postComment } = require('./controllers/postComment');
 const { patchArticle } = require('./controllers/patchArticle');
 const {psqlInvalidIdErrorHandler, customErrorHandler, internalServerError, notNullViolation} = require('./error-handlers');
 
+
 app.use(express.json());
 
 
