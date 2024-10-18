@@ -7,6 +7,7 @@ const { getArticles } = require('./controllers/getArticles');
 const { getCommentsByArticleId } = require('./controllers/getCommentsByArticleId');
 const { postComment } = require('./controllers/postComment');
 const { patchArticle } = require('./controllers/patchArticle');
+const { deleteCommentById } = require('./controllers/deleteCommentById');
 const {psqlInvalidIdErrorHandler, customErrorHandler, internalServerError, notNullViolation} = require('./error-handlers');
 
 
@@ -28,6 +29,9 @@ app.post('/api/articles/:article_id/comments', postComment);
 
 
 app.patch('/api/articles/:article_id', patchArticle);
+
+
+app.delete('/api/comments/:comment_id', deleteCommentById);
 
 
 
