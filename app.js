@@ -1,12 +1,12 @@
 const express = require("express");
 const app = express();
-const endpoints = require('./endpoints.json');
 const { getTopics } = require('./controllers/getTopics');
 const { getEndpoints } = require('./controllers/getEndpoints');
 const { getArticleById } = require('./controllers/getArticleById');
 const { getArticles } = require('./controllers/getArticles');
 const { getCommentsByArticleId } = require('./controllers/getCommentsByArticleId');
 const { postComment } = require('./controllers/postComment');
+const { patchArticle } = require('./controllers/patchArticle');
 const {psqlInvalidIdErrorHandler, customErrorHandler, internalServerError, notNullViolation} = require('./error-handlers');
 
 app.use(express.json());
@@ -26,10 +26,12 @@ app.get('/api/articles/:article_id/comments', getCommentsByArticleId);
 app.post('/api/articles/:article_id/comments', postComment);
 
 
+app.patch('/api/articles/:article_id', patchArticle);
+
 
 
 app.all('*', (req, res) => {
-    res.status(404).send({msg: 'URL Not Found'})
+    res.status(404).send({msg: 'URL Not Found'});
 })
 
 app.use(psqlInvalidIdErrorHandler);
