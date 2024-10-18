@@ -179,4 +179,68 @@ describe('Test Endpoints', () => {
               });
           });
     }); 
+
+    // PATCH
+    describe("/api/articles/:article_id", () => {
+        test("200 - increases votes on an article depending on the amount of votes defined in newVote and responds with the updated article", () => {
+          const newVote = 5;
+          const updateArticle = {
+            inc_votes: newVote,
+          };
+          return request(app)
+            .patch("/api/articles/1")
+            .send(updateArticle)
+            .expect(200)
+            .then(({ body }) => {
+              const article = body.article;
+              expect(article).toHaveProperty("article_id");
+              expect(article).toHaveProperty("title");
+              expect(article).toHaveProperty("topic");
+              expect(article).toHaveProperty("author");
+              expect(article).toHaveProperty("body");
+              expect(article).toHaveProperty("created_at");
+              expect(article).toHaveProperty("votes");
+              expect(article).toHaveProperty("article_img_url");
+              expect(article.votes).toEqual(105);
+            });
+        });
+        test("200 - decreases votes on an article depending on the amount of votes defined in newVote and responds with the updated article", () => {
+          const newVote = -100;
+          const updateArticle = {
+            inc_votes: newVote,
+          };
+          return request(app)
+            .patch("/api/articles/1")
+            .send(updateArticle)
+            .expect(200)
+            .then(({ body }) => {
+              const article = body.article;
+              expect(article.votes).toEqual(0);
+            });
+        });
+        test("400 - responds with the relevant error message if incorrect data type", () => {
+          const newVote = "smth_not_valid";
+          const updateArticle = {
+            inc_votes: newVote,
+          };
+          return request(app)
+            .patch("/api/articles/1")
+            .send(updateArticle)
+            .expect(400)
+            .then((response) => {
+              expect(response.body.message).toBe("Bad Request");
+            });
+        });
+    
+        test("400 - responds with the relevant error message if body is empty", () => {
+          const updateArticle = {};
+          return request(app)
+            .patch("/api/articles/1")
+            .send(updateArticle)
+            .expect(400)
+            .then((response) => {
+              expect(response.body.msg).toBe("Body cannot be blank");
+            });
+        });
+      });
 });
