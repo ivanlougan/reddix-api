@@ -268,4 +268,18 @@ describe('Test Endpoints', () => {
             })
         })
     });
+    describe('/api/users', () => {
+        test('200 - fetch all the users from db', () => {
+            return request(app)
+            .get('/api/users')
+            .expect(200)
+            .then(({ body }) => {
+                body.rows.forEach((user) => {
+                    expect(typeof user.username).toBe('string');
+                    expect(typeof user.name).toBe('string');
+                    expect(typeof user.avatar_url).toBe('string');
+                })
+            })
+        })       
+    });
 });
