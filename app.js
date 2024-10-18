@@ -1,9 +1,10 @@
 const express = require("express");
 const app = express();
+const { getUsers } = require('./controllers/getUsers');
 const { getTopics } = require('./controllers/getTopics');
 const { getEndpoints } = require('./controllers/getEndpoints');
-const { getArticleById } = require('./controllers/getArticleById');
 const { getArticles } = require('./controllers/getArticles');
+const { getArticleById } = require('./controllers/getArticleById');
 const { getCommentsByArticleId } = require('./controllers/getCommentsByArticleId');
 const { postComment } = require('./controllers/postComment');
 const { patchArticle } = require('./controllers/patchArticle');
@@ -23,6 +24,8 @@ app.get('/api/articles/:article_id', getArticleById);
 app.get('/api/articles', getArticles);
 
 app.get('/api/articles/:article_id/comments', getCommentsByArticleId);
+
+app.get('/api/users', getUsers);
 
 
 app.post('/api/articles/:article_id/comments', postComment);
