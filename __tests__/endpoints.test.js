@@ -242,5 +242,30 @@ describe('Test Endpoints', () => {
               expect(response.body.msg).toBe("Body cannot be blank");
             });
         });
-      });
+    });
+
+    // DELETE
+    describe("/api/comments/:comment_id", () => {
+        test("204 - deletes comment by comment id", () => {
+          return request(app)
+            .delete("/api/comments/6")
+            .expect(204)
+        });
+        test("400: Responds with a bad request message if comment_id is invalid", () => {
+            return request(app)
+            .delete("/api/comments/smth_not_valid")
+            .expect(400)
+            .then((response) => {
+                expect(response.body.message).toBe("Bad Request")
+            })
+        })
+        test("404: Responds with a not found message if comment_id is valid but the comment associated with it does not exist", () => {
+            return request(app)
+            .delete("/api/comments/888")
+            .expect(404)
+            .then((response) => {
+                expect(response.body.message).toBe("Not Found");
+            })
+        })
+    });
 });
