@@ -25,7 +25,7 @@ describe('Test Endpoints', () => {
                 expect(body.length).toBe(3);
             })
         })
-        it("GET 404 Endpoint does not exist", () => {
+        it(" 404 - endpoint does not exist", () => {
             return request(app)
             .get('/api/trees')
             .expect(404)
@@ -62,7 +62,7 @@ describe('Test Endpoints', () => {
             .get("/api/articles/smth_not_valid")
             .expect(400)
             .then(({ body }) => {
-                expect(body.message).toBe('Invalid id type');
+                expect(body.message).toBe('Bad Request');
             })
         })   
         test('404 - responds with an error message when given article_id that does not exist', () => {
@@ -124,7 +124,7 @@ describe('Test Endpoints', () => {
             .get("/api/articles/smth_not_valid/comments")
             .expect(400)
             .then(({ body }) => {
-                expect(body.message).toBe('Invalid id type');
+                expect(body.message).toBe('Bad Request');
             });
         }); 
         test('404 - responds with an error message when given article_id that does not exist', () => {
@@ -136,4 +136,47 @@ describe('Test Endpoints', () => {
             });
         }); 
     });
+
+    //POST
+    describe('/api/articles/:article_id/comments', () => {
+        test("201 - should add a comment to the relevant article_id", () => {
+            const newComment = {
+              body: "The Worlds First Photo of Quantum Entanglement Could Disprove Einsteins Theory",
+              article_id: 1,
+              author: "butter_bridge",
+              votes: 0,
+              created_at: new Date(),
+            };
+            return request(app)
+              .post("/api/articles/1/comments")
+              .send(newComment)
+              .expect(201)
+              .then(({ body }) => {
+                const comment = body.comment;
+                expect(typeof comment.comment_id).toBe("number");
+                expect(typeof comment.body).toBe("string");
+                expect(comment.article_id).toBe(1);
+                expect(typeof comment.author).toBe("string");
+                expect(comment.votes).toBe(0);
+                expect(typeof comment.created_at).toBe("string");
+              });
+          });
+      
+          test("POST: 400 - should return with appropriate error when comment is blank", () => {
+            const newComment = {
+              body: null,
+              article_id: 1,
+              author: "butter_bridge",
+              votes: 0,
+              created_at: new Date(),
+            };
+            return request(app)
+              .post("/api/articles/1/comments")
+              .send(newComment)
+              .expect(400)
+              .then((response) => {
+                expect(response.body.msg).toBe("Body cannot be blank");
+              });
+          });
+    }); 
 });

@@ -4,9 +4,10 @@ const endpoints = require('./endpoints.json');
 const { getTopics } = require('./controllers/getTopics');
 const { getEndpoints } = require('./controllers/getEndpoints');
 const { getArticleById } = require('./controllers/getArticleById');
-const { getArticles } = require('./controllers/getArticles')
-const { getCommentsByArticleId } = require('./controllers/getCommentsByArticleId')
-const {psqlInvalidIdErrorHandler, customErrorHandler, internalServerError} = require('./error-handlers')
+const { getArticles } = require('./controllers/getArticles');
+const { getCommentsByArticleId } = require('./controllers/getCommentsByArticleId');
+const { postComment } = require('./controllers/postComment');
+const {psqlInvalidIdErrorHandler, customErrorHandler, internalServerError, notNullViolation} = require('./error-handlers');
 
 app.use(express.json());
 
@@ -22,6 +23,9 @@ app.get('/api/articles', getArticles);
 app.get('/api/articles/:article_id/comments', getCommentsByArticleId);
 
 
+app.post('/api/articles/:article_id/comments', postComment);
+
+
 
 
 app.all('*', (req, res) => {
@@ -31,6 +35,7 @@ app.all('*', (req, res) => {
 app.use(psqlInvalidIdErrorHandler);
 app.use(customErrorHandler);
 app.use(internalServerError);
+app.use(notNullViolation);
 
 
 module.exports = app
