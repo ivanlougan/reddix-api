@@ -72,7 +72,16 @@ describe('Test Endpoints', () => {
             .then(({ body }) => {
                 expect(body.message).toBe('Not Found');
             })
-        })       
+        })
+        
+        test("200 - should return the total amount of all comments for a specific article_id", () => {
+            return request(app)
+              .get("/api/articles/1")
+              .expect(200)
+              .then(({ body }) => {
+                expect(typeof body.comment_count).toBe("number");
+              });
+          });
     });
     describe('/api/articles', () => {
         test('200 - responds with articles array', () => {
@@ -80,7 +89,7 @@ describe('Test Endpoints', () => {
             .get("/api/articles")
             .expect(200)
             .then(({ body }) => {
-                body.forEach((article) => {
+                body.articles.forEach((article) => {
                     expect(typeof article.article_id).toBe('number');
                     expect(typeof article.title).toBe('string');
                     expect(typeof article.topic).toBe('string');
@@ -99,8 +108,66 @@ describe('Test Endpoints', () => {
             .get("/api/articles")
             .expect(200)
             .then(({ body }) => {
-                expect(body).toBeSortedBy("created_at", {descending: true});
+                expect(body.articles).toBeSortedBy("created_at", {descending: true});
               });
+        });
+        test("should sort articles by comment_count in ascending order", () => {
+            return request(app)
+              .get("/api/articles?sort_by=comment_count&order=ASC")
+              .expect(200)
+              .then(({ body }) => {
+                const articles = body.articles;
+                expect(articles).toBeSortedBy("comment_count", { ascending: true });
+              });
+          });
+          test("200 - should sort articles by votes in descending order", () => {
+            return request(app)
+              .get("/api/articles?sort_by=votes&order=DESC")
+              .expect(200)
+              .then(({ body }) => {
+                const articles = body.articles;
+                expect(articles).toBeSortedBy("votes", { descending: true });
+              });
+          });
+      
+          test("200 - should return default sorting if invalid sort_by column is entered", () => {
+            return request(app)
+              .get("/api/articles?sort_by=invalid_col&order=DESC")
+              .expect(200)
+              .then(({ body }) => {
+                const articles = body.articles;
+                expect(articles).toBeSortedBy("created_at", { descending: true });
+              });
+          });
+          describe("GET - /api/articles?topic= filtering by query", () => {
+            test("200 - should filter the articles by the topic 'mitch'", () => {
+              return request(app)
+                .get("/api/articles?topic=mitch")
+                .expect(200)
+                .then(({ body }) => {
+                  const articles = body.articles;
+                  articles.forEach((article) => {
+                    expect(article.topic).toBe("mitch");
+                  });
+                });
+            });
+            test("200 - should respond with all articles if topic query is omitted ", () => {
+              return request(app)
+                .get("/api/articles")
+                .expect(200)
+                .then(({ body }) => {
+                  const articles = body.articles;
+                  expect(articles.length).toBe(13);
+                });
+            });
+            test("404 - should respond with appropriate status if non-existent topic is requested", () => {
+              return request(app)
+                .get("/api/articles?topic=pyrpyr")
+                .expect(404)
+                .then(({ body }) => {
+                  expect(body.message).toBe("Topic Not Found");
+                });
+            });
         });
     });
     describe('/api/articles/:article_id/comments', () => {
