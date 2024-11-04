@@ -10,9 +10,11 @@ const { postComment } = require('./controllers/postComment');
 const { patchArticle } = require('./controllers/patchArticle');
 const { deleteCommentById } = require('./controllers/deleteCommentById');
 const {psqlInvalidIdErrorHandler, customErrorHandler, internalServerError, notNullViolation} = require('./error-handlers');
+const cors = require('cors');
 
 
 app.use(express.json());
+app.use(cors());
 
 
 app.get('/api', getEndpoints);
