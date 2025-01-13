@@ -27,7 +27,7 @@ In the server.test.js file, the test data seeding will be done automatically bef
 To use the developer data, first run npm run seed in the terminal to seed the data. After that, you may run the command npm run start to start up the server and make it listen for requests.
 
 Running the Tests
-There are two test files - one for utility functions required for seeding, named 'utils.test.js', and one for testing the server itself, named 'server.test.js'. To run both test files at the same time, just type into terminal npm test. Alternatively, to run just the utils tests, run npm test utils, and to test just the server, run npm test server.
+There are two test files - one for utility functions required for seeding, named 'utils.test.js', and one for testing the server itself, named 'endpoints.test.js'. To run both test files at the same time, just type into terminal npm test. Alternatively, to run just the utils tests, run npm test utils, and to test just the server, run npm test server.
 
 Creating the .env files
 In the main directory, create the files .env.development and .env.test. This will allow you to set the development and test databases respectively. In each, set the PGDATABASE environment variable accordingly.
