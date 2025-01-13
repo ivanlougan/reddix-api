@@ -3,7 +3,7 @@
 This project aims to replicate the behaviour of a back-end API service to access data.
 
 Cloning
-To clone the project, in your terminal set to your chosen directory, run the command git clone https://github.com/AlexMan123456/nc-project
+To clone the project, in your terminal set to your chosen directory, run the command git clone https://github.com/ivanlougan/reddix-api
 
 Required Dependencies
 To successfully run this project, you will need to install the following dependencies:
